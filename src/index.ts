@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable no-underscore-dangle */
 // TODO: Add tests for it.
+// TODO: Fix a bug that allows a never[] to be passed as the fields of a query.
 import { ArgsType, MutationType, operationVariables, QueryType } from './types';
 
 type Primitive =
@@ -38,7 +39,7 @@ type Operations<T> = T extends 'query'
   ? Omit<QueryType, '__typename'>
   : Omit<MutationType, '__typename'>;
 
-type FieldsType<T> = ObjectToKeyArray<NonNullable<T>>;
+type FieldsType<T> = Exclude<ObjectToKeyArray<NonNullable<T>>, never>;
 
 type ArgsFieldType<K> = K extends keyof ArgsType ? ArgsType[K] : never;
 
@@ -60,10 +61,10 @@ type FieldType = Array<string | { [key: string]: FieldType }>;
 
 /* Creates a graphql query from passed data. This query uses variables
 (https://graphql.org/learn/queries/#variables) and is safe against injection.
-V2 returns an array, position 1 is the query and position 2 is the variables
+returns an array, position 1 is the query and position 2 is the variables
 object ready to be passed to fetch. */
 
-const fieldFormatterV2 = (fields: FieldType, offset = 2): string => {
+const fieldFormatter = (fields: FieldType, offset = 2): string => {
   const tab = '   '.repeat(offset);
   return fields.reduce((acc: string, field) => {
     let result = '';
@@ -74,7 +75,7 @@ const fieldFormatterV2 = (fields: FieldType, offset = 2): string => {
       result = Object.entries(field)
         .map(
           ([key, value]) =>
-            `${acc}${tab}${key} {\n${fieldFormatterV2(
+            `${acc}${tab}${key} {\n${fieldFormatter(
               value,
               offset + 1
             )}${tab}}\n`
@@ -92,7 +93,7 @@ type VariableFieldType = {
   type: string;
 };
 
-const variableFormatterV2 = (
+const variableFormatter = (
   endpoint: string,
   args: string[],
   alias?: string
@@ -114,7 +115,7 @@ const variableFormatterV2 = (
   return `${variables}`;
 };
 
-const operationFormatterV2 = <U extends OperationTypes>(
+const operationFormatter = <U extends OperationTypes>(
   value: unknown,
   endpoint: keyof Operations<U>
 ) => {
@@ -132,10 +133,10 @@ const operationFormatterV2 = <U extends OperationTypes>(
 
   return `${data?.alias ? `${data.alias}: ` : ''}${String(
     endpoint
-  )}(\n${args}  ) {\n${fieldFormatterV2(data.fields)}   }`;
+  )}(\n${args}  ) {\n${fieldFormatter(data.fields)}   }`;
 };
 
-const queryVariableTransformerV2 = <U>(
+const queryVariableTransformer = <U>(
   endpoint: string,
   args: ArgsFieldType<U>
 ) => {
@@ -171,19 +172,19 @@ const queryBuilder = <U extends OperationTypes, T extends OperationType<U>>(
           .map((item) => {
             variables = {
               ...variables,
-              ...queryVariableTransformerV2(
+              ...queryVariableTransformer(
                 item.alias || String(endpoint),
                 item.args
               ),
             };
 
-            variablesString += variableFormatterV2(
+            variablesString += variableFormatter(
               String(endpoint),
               Object.keys(item.args),
               item.alias
             );
 
-            return `${acc}\n  ${operationFormatterV2<U>(item, endpoint)}`;
+            return `${acc}\n  ${operationFormatter<U>(item, endpoint)}`;
           })
           .join(',');
       } else {
@@ -195,19 +196,19 @@ const queryBuilder = <U extends OperationTypes, T extends OperationType<U>>(
 
         variables = {
           ...variables,
-          ...queryVariableTransformerV2(
+          ...queryVariableTransformer(
             item.alias || String(endpoint),
             item.args
           ),
         };
 
-        variablesString += variableFormatterV2(
+        variablesString += variableFormatter(
           String(endpoint),
           Object.keys(item.args),
           item.alias
         );
 
-        result = `${acc}\n  ${operationFormatterV2<U>(item, endpoint)}`;
+        result = `${acc}\n  ${operationFormatter<U>(item, endpoint)}`;
       }
 
       return result;

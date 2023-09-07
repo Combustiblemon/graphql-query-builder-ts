@@ -11,14 +11,13 @@
     "url": "https://github.com/Combustiblemon/graphql-query-builder-ts.git"
   },
   "bin": {
-    "gql-query-builder-ts": "./bin/cli.js"
+    "graphql-query-builder-ts": "./bin/cli.js"
   },
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
     "types:format": "node ./scripts/generate-types.js",
     "types:update": "graphql-codegen-esm --config codegen.cjs",
     "build:code": "tsup src/index.ts --format cjs,esm --dts",
-    "build": "./scripts/update_types.sh ",
+    "build": "./scripts/update_types.js",
     "clearTypes": "rm -rf ./src/types.ts && npm run types:format",
     "release": "npm run clearTypes && npm run build:code && changeset publish",
     "compile": "tsc",

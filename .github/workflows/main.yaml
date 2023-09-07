@@ -1,8 +1,5 @@
 name: CI
-on:
-  push:
-    branches:
-      - '**'
+on: pull_request
 
 jobs:
   build:
@@ -18,4 +15,4 @@ jobs:
           cache: 'pnpm'
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run lint && pnpm run build
+      - run: node ./scripts/generate-types.js && pnpm run lint && pnpm run build:code

@@ -1,6 +1,6 @@
 {
   "name": "graphql-query-builder-ts",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A package to help smooth the process of building GraphQL queries in Typescript",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

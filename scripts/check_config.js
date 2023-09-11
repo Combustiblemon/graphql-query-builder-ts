@@ -10,10 +10,11 @@ const moduleRoot = `${__dirname}/../`;
 const YELLOW = '\x1b[1;33m';
 const GREEN = '\x1b[1;32m';
 const NO_COLOR = '\x1b[0m';
+const RED = '\x1b[1;31m';
 
 function error() {
   console.log(
-    `The package has not been initialized. Please run ${YELLOW} npm exec gql-query-builder-ts --init ${NO_COLOR}`
+    `${RED}The package has not been initialized. Please run ${YELLOW} npm exec graphql-query-builder-ts -- --init ${NO_COLOR}`
   );
 }
 

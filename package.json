@@ -17,12 +17,12 @@
     "types:format": "node ./scripts/generate-types.js",
     "types:update": "graphql-codegen-esm --config codegen.cjs",
     "build:code": "node ./scripts/build.js",
-    "build": "./scripts/update_types.js",
+    "build": "node ./scripts/update_types.js",
     "clearTypes": "rm -rf ./src/types.ts && npm run types:format",
     "release": "npm run clearTypes && npm run build:code && changeset publish",
     "compile": "tsc",
     "lint": "tsc",
-    "init": ""
+    "init": "tsup src/index.ts --format cjs,esm --dts"
   },
   "author": "Anastasios Chytiris (anastasios.chytiris@gmail.com)",
   "license": "MIT",

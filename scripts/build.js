@@ -9,10 +9,15 @@ const moduleRoot = `${__dirname}/../`;
 
 (async function main() {
   try {
-    execSync(`npm exec tsup ${moduleRoot}src/index.ts --format cjs,esm --dts`, {
-      stdio: 'inherit',
-      encoding: 'utf-8',
-    });
+    process.env.GQL_MODULE_ROOT = moduleRoot;
+
+    execSync(
+      `rm -rf ${moduleRoot}dist && npm exec tsup ${moduleRoot}src/index.ts --config=${moduleRoot}tsup.config.ts`,
+      {
+        stdio: 'inherit',
+        encoding: 'utf-8',
+      }
+    );
   } catch (err) {
     error(err);
   }

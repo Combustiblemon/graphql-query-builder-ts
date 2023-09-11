@@ -174,18 +174,27 @@ const formatFiles = async () => {
   process.stdout.write(`${yellow}❯${noColor} Updating graphql types...`);
   let data;
 
-  try {
-    data = await fs.readFile(filename, 'utf-8');
-  } catch (e) {}
+  data = await fs.readFile(filename, 'utf-8');
 
-  const file = data ? updateTypes(data) : createTypes();
+  if (data) {
+    const file = updateTypes(data);
 
-  // write the file back to disk with the new types
-  fs.writeFile(filename, file);
+    await fs.writeFile(filename, file);
 
-  clearLine(process.stdout);
-  cursorTo(process.stdout, 0);
-  process.stdout.write(`${green}✔${noColor} Types updated\n`);
+    clearLine(process.stdout);
+    cursorTo(process.stdout, 0);
+    process.stdout.write(`${green}✔${noColor} Types updated\n`);
+  } else {
+    const file = createTypes();
+
+    await fs.writeFile(filename, file);
+
+    clearLine(process.stdout);
+    cursorTo(process.stdout, 0);
+    process.stdout.write(
+      `${yellow}✔${noColor} Type file not found, placeholder types created\n`
+    );
+  }
 };
 
 formatFiles();

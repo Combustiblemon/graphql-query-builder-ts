@@ -4,7 +4,7 @@ import { execSync } from 'child_process';
 
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { loadConfig } from '../scripts/loadConfig';
+import { loadConfig } from '../scripts/loadConfig.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const moduleRoot = `${__dirname}/../`;

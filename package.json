@@ -1,6 +1,6 @@
 {
   "name": "graphql-query-builder-ts",
-  "version": "0.2.4",
+  "version": "0.2.6",
   "description": "A package to help smooth the process of building GraphQL queries in Typescript",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -18,8 +18,7 @@
     "types:update": "graphql-codegen-esm --config codegen.cjs",
     "build:code": "node ./scripts/build.js",
     "build": "node ./scripts/update_types.js",
-    "clearTypes": "rm -rf ./src/types.ts && npm run types:format",
-    "release": "npm run clearTypes && npm run build:code && changeset publish",
+    "release": "npm run build:code && changeset publish",
     "compile": "tsc",
     "lint": "tsc",
     "init": "tsup src/index.ts --format cjs,esm --dts"

@@ -1,6 +1,6 @@
 {
   "name": "graphql-query-builder-ts",
-  "version": "0.1.0",
+  "version": "0.2.7",
   "description": "A package to help smooth the process of building GraphQL queries in Typescript",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -16,20 +16,17 @@
   "scripts": {
     "types:format": "node ./scripts/generate-types.js",
     "types:update": "graphql-codegen-esm --config codegen.cjs",
-    "build:code": "tsup src/index.ts --format cjs,esm --dts",
-    "build": "./scripts/update_types.js",
-    "clearTypes": "rm -rf ./src/types.ts && npm run types:format",
-    "release": "npm run clearTypes && npm run build:code && changeset publish",
+    "build:code": "node ./scripts/build.js",
+    "build": "node ./scripts/update_types.js",
+    "release": "npm run build:code && changeset publish",
     "compile": "tsc",
     "lint": "tsc",
-    "init": ""
+    "init": "tsup src/index.ts --format cjs,esm --dts"
   },
   "author": "Anastasios Chytiris (anastasios.chytiris@gmail.com)",
   "license": "MIT",
   "devDependencies": {
     "@changesets/cli": "^2.26.0",
-    "@graphql-codegen/cli": "2.16.4",
-    "@graphql-codegen/typescript": "2.8.7",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "eslint": "^8.16.0",
     "eslint-config-airbnb": "^19.0.4",
@@ -41,11 +38,15 @@
     "eslint-plugin-sort-keys-fix": "^1.1.2",
     "eslint-plugin-typescript-sort-keys": "^2.1.0",
     "prettier": "^2.6.2",
-    "tsup": "^6.7.0",
     "typescript": "^5.0.4",
+    "@types/node": "^20.6.0",
+    "tsup": "^6.7.0"
+  },
+  "dependencies": {
+    "@graphql-codegen/cli": "2.16.4",
+    "@graphql-codegen/typescript": "2.8.7",
     "app-root-path": "^3.1.0",
     "chalk": "^5.3.0",
     "enquirer": "^2.4.1"
-  },
-  "dependencies": {}
+  }
 }

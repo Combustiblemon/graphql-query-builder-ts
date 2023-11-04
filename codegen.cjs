@@ -1,6 +1,6 @@
 const config = {
   generates: {
-    'src/types.ts': {
+    'src/generatedTypes.ts': {
       config: {
         enumsAsTypes: true,
         skipTypename: true,
@@ -12,9 +12,7 @@ const config = {
   overwrite: true,
   schema: {
     [process.env.CODEGEN_API_ENDPOINT]: {
-      headers: {
-        appid: 'codegen',
-      },
+      headers: JSON.parse(process.env.CODEGEN_API_HEADERS),
     },
   },
 };

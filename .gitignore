@@ -1,4 +1,6 @@
 node_modules
 dist
-src/types.ts
 .config
+gql-query-builder.config
+gql-query-builder-config.json
+src/generatedTypes.ts

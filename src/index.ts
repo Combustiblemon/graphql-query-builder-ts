@@ -2,7 +2,12 @@
 /* eslint-disable no-underscore-dangle */
 // TODO: Add tests for it.
 // TODO: Fix a bug that allows a never[] to be passed as the fields of a query.
-import { ArgsType, MutationType, operationVariables, QueryType } from './types';
+type StartOfFile = string;
+type ArgsType = {};
+type MutationType = {};
+type QueryType = {};
+const operationVariables = {};
+
 
 type Primitive =
   | string
@@ -11,7 +16,9 @@ type Primitive =
   | boolean
   | symbol
   | undefined
-  | null;
+  | null
+  | StartOfFile; // this is here so it gets compiled in index.d.ts so it can later be used to update the types correctly
+                 // the actual type of this is string
 
 type ObjectToKeyArray<Object> = NonNullable<
   {

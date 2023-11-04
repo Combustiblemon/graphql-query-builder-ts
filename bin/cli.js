@@ -4,6 +4,7 @@ import { execSync } from 'child_process';
 
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { loadConfig } from '../scripts/loadConfig.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const moduleRoot = `${__dirname}/../`;
@@ -27,12 +28,9 @@ Options:
     return;
   }
 
-  // if --check-config is passed, run the check_config script
+  // if --check-config is passed, run the loadConfig script
   if (process.argv.includes('--check-config')) {
-    execSync(`node ${moduleRoot}scripts/check_config.js`, {
-      encoding: 'utf-8',
-      stdio: 'inherit',
-    });
+    if (loadConfig()) console.log('The package has been initialized.');
     return;
   }
 

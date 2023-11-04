@@ -16,6 +16,7 @@ const moduleRoot = `${__dirname}/../`;
       {
         stdio: 'inherit',
         encoding: 'utf-8',
+        env: process.env,
       }
     );
   } catch (err) {

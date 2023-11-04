@@ -22,21 +22,42 @@ npm exec graphql-query-builder-ts -- --update
 
 ## Usage
 
+Simple usage:
+
 ```typescript
 import queryBuilder from "graphql-query-builder-ts";
 
-const query = queryBuilder('query',{
-menu:{
-  args:{
-    _id: "123456",
-    venueId: "654321"
+const query = queryBuilder("query", {
+  menu: {
+    args: {
+      _id: "654321",
+    },
+    fields: ["_id", { products: ["_id"] }],
   },
-  fields: [
-    "_id",
-    {
+});
+```
 
-    }
-  ]
-}
+Multiple or the same query/mutation:
+
+```typescript
+import queryBuilder from "graphql-query-builder-ts";
+
+const query = queryBuilder("query", {
+  menu: [
+    {
+      alias: "menu1",
+      args: {
+        _id: "654321",
+      },
+      fields: ["_id", { products: ["_id"] }],
+    },
+    {
+      alias: "menu2",
+      args: {
+        _id: "654321",
+      },
+      fields: ["_id", { products: ["_id"] }],
+    },
+  ],
 });
 ```

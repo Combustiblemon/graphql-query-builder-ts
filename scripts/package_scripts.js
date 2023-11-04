@@ -8,7 +8,7 @@ const moduleRoot = `${__dirname}/../`;
 (async function main() {
   if (process.argv.includes('--types_')) {
   }
-  execSync('npm run types:update', { stdio: 'inherit' });
-  execSync('npm run types:format', { stdio: 'inherit' });
-  execSync('npm run build:code', { stdio: 'inherit' });
+  execSync('npm run types:update', { stdio: 'inherit', env: process.env });
+  execSync('npm run types:format', { stdio: 'inherit', env: process.env });
+  execSync('npm run build:code', { stdio: 'inherit', env: process.env });
 })();

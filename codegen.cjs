@@ -12,9 +12,7 @@ const config = {
   overwrite: true,
   schema: {
     [process.env.CODEGEN_API_ENDPOINT]: {
-      headers: {
-        appid: 'codegen',
-      },
+      headers: JSON.parse(process.env.CODEGEN_API_HEADERS),
     },
   },
 };

@@ -12,8 +12,6 @@ const moduleRoot = `${__dirname}/../`;
 const readFile = `${moduleRoot}src/generatedTypes.ts`;
 const writeFile = `${moduleRoot}dist/index.d.ts`;
 
-console.log(moduleRoot);
-
 // const fileTop = `/* eslint-disable prettier/prettier */
 // /* eslint-disable @typescript-eslint/ban-types */
 // /* eslint-disable sort-keys-fix/sort-keys-fix */
@@ -172,7 +170,10 @@ const operationVariables = {} as const;
 
 async function getWriteData() {
   const writeData = await fs.readFile(writeFile, 'utf-8');
-  return 'type SOF = string;\n' + writeData.split('type SOF = string;\n')[1];
+  return (
+    'type StartOfFile = string;' +
+    writeData.split('type StartOfFile = string;')[1]
+  );
 }
 
 const formatFiles = async () => {
@@ -182,7 +183,7 @@ const formatFiles = async () => {
   const writeData = await getWriteData();
 
   if (readData) {
-    const file = updateTypes(readData);
+    const file = updateTypes(readData).replaceAll('export ', '');
 
     await fs.writeFile(writeFile, file + writeData);
 
@@ -190,7 +191,7 @@ const formatFiles = async () => {
     cursorTo(process.stdout, 0);
     process.stdout.write(`${green}✔${noColor} Types updated\n`);
   } else {
-    const file = createTypes();
+    const file = createTypes().replaceAll('export ', '');
 
     await fs.writeFile(writeFile, file + writeData);
 

@@ -58,7 +58,7 @@ const updateTypes = (data) => {
 
   const variables = data
     // split the file into lines
-    .split('export type ')
+    .split('type ')
     // filter out lines that don't include the word "ArgsType"
     .filter((line) => line.includes('ArgsType'))
     .map((type) =>
@@ -149,26 +149,24 @@ const updateTypes = (data) => {
     .replace(' ObjectID: any;', ' ObjectID: string;')
     .replace(' DateTime: any;', ' DateTime: string;')
     .replace(' Date: any;', ' Date: string;')}
-export type QueryArgsType = {
+type QueryArgsType = {
   ${queryArgs.join(',\n  ')}
 }
 
-export type MutationArgsType = {
+type MutationArgsType = {
   ${mutationArgs.join(',\n  ')}
 }
 
-export type ArgsType = QueryArgsType & MutationArgsType\n
+type ArgsType = QueryArgsType & MutationArgsType\n
 
-export const operationVariables = {\n ${variables.join(
-    ',\n  '
-  )}\n} as const;\n`;
+const operationVariables = {\n ${variables.join(',\n  ')}\n} as const;\n`;
 };
 
 const createTypes = () => {
-  return `export type QueryType = {}
-export type MutationType = {}
-export type ArgsType = QueryType & MutationType
-export const operationVariables = {} as const;
+  return `type QueryType = {}
+type MutationType = {}
+type ArgsType = QueryType & MutationType
+const operationVariables = {} as const;
   `;
 };
 

@@ -2,8 +2,11 @@
 /* eslint-disable no-underscore-dangle */
 // TODO: Add tests for it.
 // TODO: Fix a bug that allows a never[] to be passed as the fields of a query.
-import { operationVariables } from './types';
-import type {StartOfFile, ArgsType, MutationType, QueryType } from './types';
+type StartOfFile = string;
+type ArgsType = {};
+type MutationType = {};
+type QueryType = {};
+const operationVariables = {};
 
 
 type Primitive =

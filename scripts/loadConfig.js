@@ -27,7 +27,7 @@ function fileError() {
 
 /**
  * Check if the .config file exists and if it does, check if it contains CODEGEN_API_ENDPOINT and CODEGEN_API_HEADERS
- * @returns {string} - the contents of the .config file
+ * @returns {Promise<string>} - the contents of the .config file
  */
 async function loadConfig() {
   // check if the .config file exists

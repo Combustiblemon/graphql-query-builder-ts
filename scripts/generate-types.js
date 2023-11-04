@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 /* eslint-disable no-octal-escape */
 import { promises as fs } from 'fs';
-import { exit } from 'process';
 import { clearLine, cursorTo } from 'readline';
 
 import { dirname } from 'path';
@@ -10,18 +9,21 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const moduleRoot = `${__dirname}/../`;
 
-const filename = `${moduleRoot}src/types.ts`;
+const readFile = `${moduleRoot}src/generatedTypes.ts`;
+const writeFile = `${moduleRoot}dist/index.d.ts`;
 
-const fileTop = `/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable sort-keys-fix/sort-keys-fix */
-/* eslint-disable no-use-before-define */
-/* eslint-disable typescript-sort-keys/interface */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/*
-* This file is auto-generated, any changes made will be lost.
-*/
-`;
+console.log(moduleRoot);
+
+// const fileTop = `/* eslint-disable prettier/prettier */
+// /* eslint-disable @typescript-eslint/ban-types */
+// /* eslint-disable sort-keys-fix/sort-keys-fix */
+// /* eslint-disable no-use-before-define */
+// /* eslint-disable typescript-sort-keys/interface */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
+// /*
+// * This file is auto-generated, any changes made will be lost.
+// */
+// `;
 
 const yellow = '\x1b[1;33m';
 const green = '\x1b[1;32m';
@@ -143,7 +145,7 @@ const updateTypes = (data) => {
     )
     .map((v) => `${v[0]}: {\n${v.slice(1).join(',\n')}\n  }`);
 
-  return `${fileTop}${data
+  return `${data
     .replace(' ObjectID: any;', ' ObjectID: string;')
     .replace(' DateTime: any;', ' DateTime: string;')
     .replace(' Date: any;', ' Date: string;')}
@@ -163,23 +165,28 @@ export const operationVariables = {\n ${variables.join(
 };
 
 const createTypes = () => {
-  return `${fileTop}export type QueryType = {}
+  return `export type QueryType = {}
 export type MutationType = {}
 export type ArgsType = QueryType & MutationType
 export const operationVariables = {} as const;
   `;
 };
 
+async function getWriteData() {
+  const writeData = await fs.readFile(writeFile, 'utf-8');
+  return 'type SOF = string;\n' + writeData.split('type SOF = string;\n')[1];
+}
+
 const formatFiles = async () => {
   process.stdout.write(`${yellow}❯${noColor} Updating graphql types...`);
-  let data;
 
-  data = await fs.readFile(filename, 'utf-8');
+  const readData = await fs.readFile(readFile, 'utf-8');
+  const writeData = await getWriteData();
 
-  if (data) {
-    const file = updateTypes(data);
+  if (readData) {
+    const file = updateTypes(readData);
 
-    await fs.writeFile(filename, file);
+    await fs.writeFile(writeFile, file + writeData);
 
     clearLine(process.stdout);
     cursorTo(process.stdout, 0);
@@ -187,7 +194,7 @@ const formatFiles = async () => {
   } else {
     const file = createTypes();
 
-    await fs.writeFile(filename, file);
+    await fs.writeFile(writeFile, file + writeData);
 
     clearLine(process.stdout);
     cursorTo(process.stdout, 0);

@@ -17,7 +17,7 @@ try {
     };
   } else {
     // get the config file contents
-    config = loadConfig();
+    config = await loadConfig();
   }
 
   // Check if the output contains a space
@@ -34,10 +34,6 @@ try {
     env: process.env,
   });
   execSync(`cd ${moduleRoot} && npm run types:format`, {
-    stdio: 'inherit',
-    env: process.env,
-  });
-  execSync(`cd ${moduleRoot} && npm run build:code`, {
     stdio: 'inherit',
     env: process.env,
   });

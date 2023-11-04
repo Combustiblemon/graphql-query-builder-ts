@@ -1,6 +1,6 @@
 const config = {
   generates: {
-    'src/types.ts': {
+    'src/generatedTypes.ts': {
       config: {
         enumsAsTypes: true,
         skipTypename: true,
